@@ -1,0 +1,13 @@
+name: AdminChannel
+main: com.kmaismith.adminchannel.AdminChannel
+version: 0.1
+author: kMaiSmith
+softdepend: [Multiverse-Core]
+description: Simple admin channel plugin for Bukkit
+commands:
+  adminchannel:
+    description: Displays information about the chunk.
+    usage: "/adminchannel"
+permissions:
+  adminchannel.use:
+    description: Enter admin channel.
