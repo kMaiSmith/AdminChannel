@@ -23,7 +23,47 @@
 
 package com.kmaismith.adminchannel;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class AdminChannel extends JavaPlugin {
+
+    private Set<Player> admins;
+
+    public AdminChannel() {
+        admins = new HashSet<Player>();
+    }
+
+    public void onEnable() {
+        PluginManager pluginManager = this.getServer().getPluginManager();
+
+        ChatHandler eventHandler = new ChatHandler(admins);
+        pluginManager.registerEvents(eventHandler, this);
+    }
+
+    @Override
+    public boolean onCommand(CommandSender commandSender, Command command, String description, String[] args) {
+        if (!(commandSender instanceof Player)) {
+            return false;
+        }
+
+        Player sender = (Player) commandSender;
+
+        if (sender.hasPermission("adminchannel.use") && command.getName().equalsIgnoreCase("adminchannel")) {
+            if (admins.contains(sender)) {
+                admins.remove(sender);
+            } else {
+                admins.add(sender);
+            }
+        }
+
+        return false;
+    }
+
 }

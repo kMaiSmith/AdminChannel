@@ -22,32 +22,29 @@
 
 package com.kmaismith.adminchannel;
 
-import junit.framework.Assert;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.junit.Test;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import static org.mockito.Mockito.mock;
+import java.util.Set;
 
-/**
- * Created with IntelliJ IDEA.
- * User: kyle
- * Date: 3/3/14
- * Time: 8:01 PM
- * To change this template use File | Settings | File Templates.
- */
-public class AdminChannelTest {
+public class ChatHandler implements Listener {
+    private Set<Player> admins;
 
-    @Test
-    public void testAdminChannelAddsPlayersToAdminsPool() {
-        AdminChannel systemUnderTest = new AdminChannel();
+    public ChatHandler(Set<Player> admins) {
+        this.admins = admins;
+    }
 
-        CommandSender commandSender = mock(CommandSender.class);
-
-        Command mockCommand = mock(Command.class);
-
-        boolean retcode = systemUnderTest.onCommand(commandSender, mockCommand, "", new String[]{});
-
-        Assert.assertFalse(retcode);
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
+        if (!admins.contains(event.getPlayer())) {
+            return;
+        }
+        Set<Player> recipients = event.getRecipients();
+        recipients.clear();
+        recipients.addAll(admins);
+        event.setFormat("[AdminChat]<" + event.getPlayer().getDisplayName() + "> " + event.getMessage());
     }
 }
