@@ -1,6 +1,6 @@
 .classpath
 .project
-ChunkClaim.iml
+*.iml
 .idea/*
 .bin/*
 classes/*
