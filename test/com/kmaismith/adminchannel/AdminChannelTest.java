@@ -24,10 +24,10 @@ package com.kmaismith.adminchannel;
 
 import junit.framework.Assert;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.junit.Test;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -42,12 +42,14 @@ public class AdminChannelTest {
     public void testAdminChannelAddsPlayersToAdminsPool() {
         AdminChannel systemUnderTest = new AdminChannel();
 
-        CommandSender commandSender = mock(CommandSender.class);
-
+        Player commandSender = mock(Player.class);
+        when(commandSender.hasPermission("adminchannel.use")).thenReturn(true);
         Command mockCommand = mock(Command.class);
+        when(mockCommand.getName()).thenReturn("adminchannel");
 
         boolean retcode = systemUnderTest.onCommand(commandSender, mockCommand, "", new String[]{});
 
-        Assert.assertFalse(retcode);
+        Assert.assertTrue(retcode);
+        verify(commandSender).sendMessage("Welcome to the admin channel!");
     }
 }

@@ -55,12 +55,14 @@ public class AdminChannel extends JavaPlugin {
 
         Player sender = (Player) commandSender;
 
-        if (sender.hasPermission("adminchannel.use") && command.getName().equalsIgnoreCase("adminchannel")) {
+        if (sender.hasPermission("adminchannel.use") && command.getName().equals("adminchannel")) {
             if (admins.contains(sender)) {
                 admins.remove(sender);
             } else {
                 admins.add(sender);
+                sender.sendMessage("Welcome to the admin channel!");
             }
+            return true;
         }
 
         return false;
